@@ -1,5 +1,5 @@
 <script setup>
-import MotionTabsNav from './components/MotionTabsNav.vue';
+import AppNav from './components/AppNav.vue';
 
 useHead({
   meta: [
@@ -20,13 +20,13 @@ useSeoMeta({
   title,
   description,
   ogTitle: title,
-  ogDescription: description,
+  ogDescription: description
 })
 </script>
 
 <template>
   <UApp>
-    <MotionTabsNav />
+    <AppNav />
 
     <UMain>
       <NuxtPage />
