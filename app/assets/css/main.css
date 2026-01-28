@@ -2,17 +2,110 @@
 @import "@nuxt/ui";
 
 @theme static {
-  --font-sans: 'Public Sans', sans-serif;
+  --font-sans: "Public Sans", sans-serif;
 
-  --color-green-50: #EFFDF5;
-  --color-green-100: #D9FBE8;
-  --color-green-200: #B3F5D1;
-  --color-green-300: #75EDAE;
-  --color-green-400: #00DC82;
-  --color-green-500: #00C16A;
-  --color-green-600: #00A155;
-  --color-green-700: #007F45;
+  --color-green-50: #effdf5;
+  --color-green-100: #d9fbe8;
+  --color-green-200: #b3f5d1;
+  --color-green-300: #75edae;
+  --color-green-400: #00dc82;
+  --color-green-500: #00c16a;
+  --color-green-600: #00a155;
+  --color-green-700: #007f45;
   --color-green-800: #016538;
-  --color-green-900: #0A5331;
-  --color-green-950: #052E16;
+  --color-green-900: #0a5331;
+  --color-green-950: #052e16;
+
+  --color-nav-black: #0f0f0f;
+  --color-nav-gray: #3f3f3f;
+  --color-nav-white: #fff;
+}
+
+:root {
+  --nav-black: #0f0f0f;
+  --nav-gray: #3f3f3f;
+  --nav-white: #fff;
+}
+
+.nav-wrap {
+  border: 1px solid var(--nav-gray);
+  width: fit-content;
+  margin: 0 auto;
+  border-radius: 500px;
+  position: relative;
+  box-shadow: inset 10px 0 10px black;
+  background: linear-gradient(0deg, #141414, #242424);
+}
+
+.nav-wrap:after {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: -5px;
+  background: linear-gradient(180deg, var(--nav-gray), #212121);
+  border-radius: 500px;
+  z-index: -1;
+}
+
+.nav {
+  width: fit-content;
+  anchor-name: --nav;
+  margin: 6.7px;
+}
+
+.nav a {
+  z-index: 10;
+  position: relative;
+  display: inline-block;
+  padding: 14px 38px;
+  color: white;
+  text-decoration: none;
+}
+
+.nav a:before {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+}
+
+.nav a.router-link-active {
+  anchor-name: --active;
+  color: black;
+}
+
+.nav a:hover:before {
+  anchor-name: --nav;
+}
+
+.bubble {
+  background: white;
+  /* z-index: 5; */
+  top: anchor(top);
+  right: anchor(right);
+  bottom: anchor(bottom);
+  left: anchor(left);
+  position: absolute;
+  transition: all 0.2s;
+  border-radius: 500px;
+}
+
+.bubble.active {
+  position-anchor: --active;
+  z-index: 2;
+  background: linear-gradient(180deg, #f2f2f2, #b3b3b3);
+  box-shadow: inset 0 2px 7px #fff;
+}
+
+.bubble.hover {
+  z-index: 1;
+  background: linear-gradient(180deg, var(--nav-gray), #212121);
+  box-shadow: inset 0 2px 7px #ffffff29;
+  position-anchor: --nav;
+}
+
+.target {
+  position: relative;
+  z-index: -1;
 }
