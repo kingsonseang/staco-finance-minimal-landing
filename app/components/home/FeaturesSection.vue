@@ -1,19 +1,21 @@
 <script setup>
+import FeatureCard from './FeatureCard.vue'
+
 const features = [
     {
-        icon: 'i-heroicons-academic-cap',
+        icon: 'i-heroicons-server-stack',
         title: 'Used advanced technologies',
         description: 'I must explain to you how all this mistaken. Idea of main denouncing pleasure and praising pain was born',
         link: '#'
     },
     {
-        icon: 'i-heroicons-shield-check',
-        title: 'Know about it transition',
+        icon: 'i-heroicons-pencil-square',
+        title: 'Clean design & Typography',
         description: 'I must explain to you how all this mistaken. Idea of main denouncing pleasure and praising pain was born',
         link: '#'
     },
     {
-        icon: 'i-heroicons-user-group',
+        icon: 'i-heroicons-chat-bubble-left-right',
         title: 'Best customer support',
         description: 'I must explain to you how all this mistaken. Idea of main denouncing pleasure and praising pain was born',
         link: '#'

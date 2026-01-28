@@ -15,7 +15,5 @@ import FooterSection from '~/components/home/FooterSection.vue';
     <LetsTalk />
     <TeamSection />
     <TestimonialsSection />
-    <ArticlesSection />
-    <FooterSection />
   </div>
 </template>
