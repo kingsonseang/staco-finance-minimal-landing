@@ -1,18 +1,52 @@
 <script setup>
-const chartVariants = {
-    initial: {
-        y: 250,
-        opacity: 0
-    },
-    visible: {
-        y: 0,
-        opacity: 1,
-        transition: {
-            duration: 800,
-            ease: 'easeOut'
-        }
-    }
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const chartRef = ref(null)
+const scrollProgress = ref(0)
+
+const updateScrollProgress = () => {
+    if (!chartRef.value) return
+
+    const element = chartRef.value
+    const rect = element.getBoundingClientRect()
+    const windowHeight = window.innerHeight
+
+    // Calculate when element enters and exits viewport
+    const elementTop = rect.top
+    const elementHeight = rect.height
+
+    // Start animation when element is at bottom of viewport
+    // Complete when element is at 70% of viewport height (30% from bottom)
+    const scrollStart = windowHeight
+    const scrollEnd = windowHeight * 0.5  // 50% from top
+
+    const scrollRange = scrollStart - scrollEnd
+    const currentScroll = scrollStart - elementTop
+
+    // Calculate progress (0 to 1)
+    let progress = Math.max(0, Math.min(1, currentScroll / scrollRange))
+
+    scrollProgress.value = progress
 }
+
+onMounted(() => {
+    window.addEventListener('scroll', updateScrollProgress)
+    updateScrollProgress() // Initial calculation
+})
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', updateScrollProgress)
+})
+
+// Compute transform based on scroll progress
+const chartTransform = computed(() => {
+    const y = 250 * (1 - scrollProgress.value)
+    const opacity = scrollProgress.value
+    return {
+        transform: `translateY(${y}px)`,
+        opacity: opacity
+    }
+})
 </script>
 
 <template>
@@ -38,8 +72,8 @@ const chartVariants = {
 
                 <!-- Right Chart Graphic -->
                 <div class="h-full flex items-end justify-end">
-                    <svg v-motion :initial="chartVariants.initial" :visible-once="chartVariants.visible"
-                        class="w-full max-w-[372px] h-auto" viewBox="0 0 372 250" fill="none"
+                    <svg ref="chartRef" :style="chartTransform"
+                        class="w-full max-w-[372px] h-auto transition-all duration-0" viewBox="0 0 372 250" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <!-- Bar chart columns (colored) -->
                         <path d="M137.134 105.312H120.811V137.65H137.134V105.312Z" fill="#22675D" />
