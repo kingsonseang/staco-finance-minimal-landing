@@ -24,9 +24,9 @@ const features = [
 </script>
 
 <template>
-  <section class="py-20">
+  <section class="max-md:px-4 pt-20 pb-8 lg:pb-12 bg-white">
     <UContainer>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
         <FeatureCard
           v-for="(feature, index) in features"
           :key="index"

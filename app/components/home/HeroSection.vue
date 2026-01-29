@@ -5,7 +5,7 @@ import AnimatedWords from '~/components/AnimatedWords.vue'
 </script>
 
 <template>
-  <section class="relative bg-[#1F2334] overflow-hidden mb-20">
+  <section class="relative bg-[#1F2334] overflow-hidden lg:mb-20">
     <span class="absolute top-[30%] left-[20%]"><NuxtImg
       src="/images/finance-index/Vector-1.svg"
       alt="img"
@@ -38,8 +38,8 @@ import AnimatedWords from '~/components/AnimatedWords.vue'
     /></span>
     <span />
 
-    <UContainer class="relative max-w-302 pt-40 pb-26 lg:pt-45 lg:pb-30 xl:pt-62 xl:pb-53">
-      <span class="max-lg:hidden h-[40%] absolute -top-[32px] right-[22.3%] z-3"><NuxtImg
+    <UContainer class="relative max-w-302 max-md:px-4 pt-40 pb-26 lg:pt-45 lg:pb-30 xl:pt-62 xl:pb-53">
+      <span class="max-lg:hidden h-[40%] absolute -top-[32px] right-[22.2%] z-3"><NuxtImg
         src="/images/finance-index/banner-vector-line1.svg"
         alt="img"
         class="h-full max-w-full align-middle"

@@ -1,183 +1,221 @@
-<script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-
-// Slider state
+<script setup lang="ts">
 const currentSlide = ref(0)
 const progress = ref(0)
-const intervalDuration = 10000 // 10 seconds
-let autoPlayInterval = null
-let progressInterval = null
 
-// Slide data extracted from the provided HTML
+// Carousel ref to access Embla API
+const carouselRef = useTemplateRef('carouselRef')
+
 const slides = [
   {
+    subtitle: 'Why Choose Us',
     title: 'Discover business Opportunities',
-    description: 'We use as filler text for layouts, non-readability is of great importance but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful nor again is there anyone.',
+    description: 'We use as filler text for layouts, non-readability is of great importancebut because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful nor again is there anyone.',
     features: [
       'Profile Consultation',
       'Asset management',
       'No-risk business idea'
-    ]
+    ],
+    image: '/images/img/feature-team1.png'
   },
   {
+    subtitle: 'Why Choose Us',
     title: 'Manage team increase productivity',
-    description: 'We use as filler text for layouts, non-readability is of great importance but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful nor again is there anyone.',
+    description: 'We use as filler text for layouts, non-readability is of great importancebut because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful nor again is there anyone.',
     features: [
       '99% Survey Report',
       'Trusted by teams',
       'Self-Service'
-    ]
+    ],
+    image: '/images/img/feature-team2.png'
   },
   {
+    subtitle: 'Why Choose Us',
     title: 'Manage team increase productivity',
-    description: 'We use as filler text for layouts, non-readability is of great importance but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful nor again is there anyone.',
+    description: 'We use as filler text for layouts, non-readability is of great importancebut because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful nor again is there anyone.',
     features: [
       '99% Survey Report',
       'Trusted by teams',
       'Self-Service'
-    ]
+    ],
+    image: '/images/img/feature-team3.png'
   }
 ]
 
-// Image data - using placeholder images (replace with actual team images)
-const images = [
-  'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=600&fit=crop',
-  'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=600&fit=crop',
-  'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=600&h=600&fit=crop'
-]
-
-// Start progress animation
-const startProgress = () => {
-  progress.value = 0
-  const progressStep = 100 / (intervalDuration / 50) // Update every 50ms
-
-  progressInterval = setInterval(() => {
-    progress.value += progressStep
-    if (progress.value >= 100) {
-      progress.value = 100
-    }
-  }, 50)
+// Handle image click - use Embla API to scroll to specific slide
+const goToSlide = (index: number) => {
+  if (carouselRef.value?.emblaApi) {
+    carouselRef.value.emblaApi.scrollTo(index)
+  }
 }
 
-// Restart timers
-const restartTimers = () => {
-  // Clear existing intervals
-  if (autoPlayInterval) clearInterval(autoPlayInterval)
-  if (progressInterval) clearInterval(progressInterval)
+// Subscribe to Embla select event and update currentSlide
+const onCarouselInit = () => {
+  if (!carouselRef.value?.emblaApi) return
 
-  // Start new intervals
-  startProgress()
-  autoPlayInterval = setInterval(() => {
-    currentSlide.value = (currentSlide.value + 1) % slides.length
-    startProgress()
-  }, intervalDuration)
+  const emblaApi = carouselRef.value.emblaApi
+
+  // Subscribe to 'select' event - fires when slide changes
+  emblaApi.on('select', () => {
+    currentSlide.value = emblaApi.selectedScrollSnap()
+    // Reset progress when slide changes
+    progress.value = 0
+  })
+
+  // Set initial slide
+  currentSlide.value = emblaApi.selectedScrollSnap()
 }
 
-// Handle image click
-const goToSlide = (index) => {
-  currentSlide.value = index
-  restartTimers()
-}
-
-// Lifecycle hooks
-onMounted(() => {
-  restartTimers()
+// Watch for carousel ref to be ready
+watch(() => carouselRef.value?.emblaApi, (api) => {
+  if (api) {
+    onCarouselInit()
+  }
 })
 
+// Simulate progress bar that fills up over the autoplay duration
+// This is a visual indicator, actual slide change is controlled by UCarousel's autoplay
+let progressAnimationFrame: number | null = null
+const animateProgress = () => {
+  const startTime = Date.now()
+  const duration = 6400 // Match carousel autoplay duration
+
+  const updateProgress = () => {
+    const elapsed = Date.now() - startTime
+    const newProgress = Math.min((elapsed / duration) * 100, 100)
+    progress.value = newProgress
+
+    if (newProgress < 100) {
+      progressAnimationFrame = requestAnimationFrame(updateProgress)
+    }
+  }
+
+  updateProgress()
+}
+
+// Watch currentSlide to restart progress animation
+watch(currentSlide, () => {
+  if (progressAnimationFrame) {
+    cancelAnimationFrame(progressAnimationFrame)
+  }
+  animateProgress()
+}, { immediate: true })
+
 onUnmounted(() => {
-  if (autoPlayInterval) clearInterval(autoPlayInterval)
-  if (progressInterval) clearInterval(progressInterval)
+  if (progressAnimationFrame) {
+    cancelAnimationFrame(progressAnimationFrame)
+  }
+
+  // Cleanup Embla event listeners
+  if (carouselRef.value?.emblaApi) {
+    carouselRef.value.emblaApi.off('select', () => {})
+  }
 })
 </script>
 
 <template>
-  <section class="py-20 bg-white">
+  <section class="py-[120px] bg-white">
     <UContainer>
       <div class="grid lg:grid-cols-2 gap-12 items-center">
-        <!-- Left: Text Content Slider -->
-        <div class="space-y-6">
-          <span class="inline-block text-[#0095FF] text-sm font-bold tracking-[3.6px] uppercase">
-            WHY CHOOSE US
-          </span>
-
-          <!-- Content transitions -->
-          <Transition
-            name="fade"
-            mode="out-in"
+        <!-- Left: Content Carousel -->
+        <div>
+          <UCarousel
+            ref="carouselRef"
+            :items="slides"
+            :ui="{
+              item: 'w-full',
+              container: 'gap-0'
+            }"
+            :loop="true"
+            :autoplay="{ delay: 6400 }"
+            :arrows="false"
+            :indicators="false"
           >
-            <div
-              :key="currentSlide"
-              class="space-y-6"
-            >
-              <h2 class="text-4xl lg:text-5xl font-bold text-[#111111] leading-tight">
-                {{ slides[currentSlide].title }}
-              </h2>
+            <template #default="{ item }">
+              <div class="space-y-6">
+                <!-- Subtitle -->
+                <span class="inline-block text-[#44C486] font-['DM_Sans'] text-lg font-bold leading-[30px] tracking-[0.2em]">
+                  {{ item.subtitle }}
+                </span>
 
-              <p class="text-base text-[#444444] leading-relaxed">
-                {{ slides[currentSlide].description }}
-              </p>
+                <!-- Title -->
+                <h2 class="font-['Montserrat_Alternates'] font-bold text-[40px] leading-[60px] text-[#111111] mb-10">
+                  {{ item.title }}
+                </h2>
 
-              <ul class="space-y-3">
-                <li
-                  v-for="(feature, index) in slides[currentSlide].features"
-                  :key="index"
-                  class="flex items-start gap-3"
-                >
-                  <UIcon
-                    name="i-heroicons-check"
-                    class="w-5 h-5 text-[#0EC36B] flex-shrink-0 mt-0.5"
-                  />
-                  <span class="text-[#444444]">{{ feature }}</span>
-                </li>
-              </ul>
-            </div>
-          </Transition>
+                <!-- Description -->
+                <p class="text-base leading-relaxed text-gray-700">
+                  {{ item.description }}
+                </p>
+
+                <!-- Features List -->
+                <ul class="flex items-center gap-5 justify-between flex-wrap max-w-[354px] list-none mt-[30px]">
+                  <li
+                    v-for="(feature, index) in item.features"
+                    :key="index"
+                    class="flex items-center gap-[10px] font-medium text-[15px] leading-[26px] text-[#111111]"
+                  >
+                    <UIcon
+                      name="i-heroicons-check"
+                      class="w-[18px] h-[18px] text-[#0EC36B]"
+                    />
+                    <span>{{ feature }}</span>
+                  </li>
+                </ul>
+              </div>
+            </template>
+          </UCarousel>
         </div>
 
-        <!-- Right: Image Gallery with Controls -->
-        <div class="flex gap-4 items-center justify-end">
+        <!-- Right: Image Slider -->
+        <div class="flex items-center justify-start gap-5">
           <div
-            v-for="(image, index) in images"
+            v-for="(slide, index) in slides"
             :key="index"
-            class="relative cursor-pointer transition-all duration-500 rounded-2xl overflow-hidden group"
+            class="relative cursor-pointer rounded-[20px] overflow-hidden transition-all duration-300"
             :class="{
-              'w-30 h-96': index !== currentSlide,
-              'w-full min-w-56 h-96': index === currentSlide
+              'w-[17.54%] h-[460px]': index !== currentSlide,
+              'w-[57.89%] h-[460px]': index === currentSlide
             }"
             @click="goToSlide(index)"
           >
             <!-- Image -->
-            <img
-              :src="image"
-              :alt="`Team member ${index + 1}`"
-              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            >
-
-            <!-- Overlay on hover for inactive images -->
-            <div
-              class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            <NuxtImg
+              :src="slide.image"
+              :alt="`Feature ${index + 1}`"
+              class="w-full h-full object-cover object-center transition-transform duration-300"
             />
 
-            <!-- Progress bar for active image -->
-            <!-- <div v-if="index === currentSlide" class="absolute bottom-0 left-0 right-0 h-1 bg-black/30">
-                            <div class="h-full bg-white transition-all duration-100"
-                                :style="{ width: `${progress}%` }" />
-                        </div> -->
+            <!-- Dark overlay gradient (always shown on inactive) -->
+            <div
+              v-if="index !== currentSlide"
+              class="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 transition-opacity duration-300"
+            />
+
+            <!-- Arrow icon (only on inactive) -->
+            <div
+              v-if="index !== currentSlide"
+              class="absolute bottom-[30px] left-1/2 -translate-x-1/2 transition-opacity duration-300"
+            >
+              <NuxtImg
+                src="/images/icons/arrow-right-white.svg"
+                alt="arrow"
+                class="w-6 h-6"
+              />
+            </div>
+
+            <!-- Progress bar (only on active) -->
+            <div
+              v-if="index === currentSlide"
+              class="absolute bottom-[30px] left-5 right-5 h-2 bg-white/20 rounded overflow-hidden"
+            >
+              <div
+                class="h-full bg-white/50 transition-none"
+                :style="{ width: `${progress}%` }"
+              />
+            </div>
           </div>
         </div>
       </div>
     </UContainer>
   </section>
 </template>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-</style>

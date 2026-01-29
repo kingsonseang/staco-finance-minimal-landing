@@ -31,7 +31,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <UApp class="bg-white">
+  <UApp>
     <!-- <AppNav /> -->
 
     <UMain>
