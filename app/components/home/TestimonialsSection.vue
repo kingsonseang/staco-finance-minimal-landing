@@ -53,6 +53,9 @@ const goToSlide = (index: number) => {
 // Animate progress bar synced with slide changes
 let progressAnimationFrame: number | null = null
 const startProgress = () => {
+  // Only run in browser
+  if (typeof window === 'undefined') return
+
   const startTime = Date.now()
   // Slightly less than autoplay delay to account for transition time
   const duration = 11500 // ~11.5 seconds (12s autoplay - transition time)
