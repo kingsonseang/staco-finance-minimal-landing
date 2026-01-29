@@ -115,83 +115,80 @@ onUnmounted(() => {
 <template>
   <section class="py-[120px] bg-white">
     <UContainer>
-      <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
         <!-- Left: Content Carousel -->
-        <div>
-          <UCarousel
-            ref="carouselRef"
-            :items="slides"
-            :ui="{
-              item: 'w-full',
-              container: 'gap-0'
-            }"
-            :loop="true"
-            :autoplay="{ delay: 6400 }"
-            :arrows="false"
-            :indicators="false"
-          >
-            <template #default="{ item }">
-              <div class="space-y-6">
-                <!-- Subtitle -->
-                <span class="inline-block text-[#44C486] font-['DM_Sans'] text-lg font-bold leading-[30px] tracking-[0.2em]">
-                  {{ item.subtitle }}
-                </span>
+        <UCarousel
+          ref="carouselRef"
+          :items="slides"
+          :ui="{
+            item: 'w-full',
+            container: 'gap-0 overflow-clip',
+            root: 'max-w-[calc(100vw-32px)] col-span-1'
+          }"
+          :loop="true"
+          :autoplay="{ delay: 6400 }"
+          :arrows="false"
+          :indicators="false"
+        >
+          <template #default="{ item }">
+            <div class="space-y-6">
+              <!-- Subtitle -->
+              <span class="inline-block text-[#44C486] font-['DM_Sans'] text-lg font-bold leading-[30px] tracking-[0.2em]">
+                {{ item.subtitle }}
+              </span>
 
-                <!-- Title -->
-                <h2 class="font-['Montserrat_Alternates'] font-bold text-[40px] leading-[60px] text-[#111111] mb-10">
-                  {{ item.title }}
-                </h2>
+              <!-- Title -->
+              <h2 class="font-['Montserrat_Alternates'] font-bold text-[40px] leading-[60px] text-[#111111] mb-10">
+                {{ item.title }}
+              </h2>
 
-                <!-- Description -->
-                <p class="text-base leading-relaxed text-gray-700">
-                  {{ item.description }}
-                </p>
+              <!-- Description -->
+              <p class="text-base leading-relaxed text-gray-700">
+                {{ item.description }}
+              </p>
 
-                <!-- Features List -->
-                <ul class="flex items-center gap-5 justify-between flex-wrap max-w-[354px] list-none mt-[30px]">
-                  <li
-                    v-for="(feature, index) in item.features"
-                    :key="index"
-                    class="flex items-center gap-[10px] font-medium text-[15px] leading-[26px] text-[#111111]"
-                  >
-                    <UIcon
-                      name="i-heroicons-check"
-                      class="w-[18px] h-[18px] text-[#0EC36B]"
-                    />
-                    <span>{{ feature }}</span>
-                  </li>
-                </ul>
-              </div>
-            </template>
-          </UCarousel>
-        </div>
+              <!-- Features List -->
+              <ul class="flex items-center gap-5 justify-between flex-wrap max-w-[354px] list-none mt-[30px]">
+                <li
+                  v-for="(feature, index) in item.features"
+                  :key="index"
+                  class="flex items-center gap-[10px] font-medium text-[15px] leading-[26px] text-[#111111]"
+                >
+                  <UIcon
+                    name="i-heroicons-check"
+                    class="w-[18px] h-[18px] text-[#0EC36B]"
+                  />
+                  <span>{{ feature }}</span>
+                </li>
+              </ul>
+            </div>
+          </template>
+        </UCarousel>
 
         <!-- Right: Image Slider -->
-        <div class="flex items-center justify-start gap-5">
+        <div class="flex items-center justify-start gap-2 lg:gap-5 max-lg:justify-center overflow-x-auto max-lg:max-w-full">
           <div
             v-for="(slide, index) in slides"
             :key="index"
-            class="relative cursor-pointer rounded-[20px] overflow-hidden transition-all duration-300"
+            class="relative cursor-pointer rounded-[20px] overflow-hidden transition-all duration-300 shrink-0"
             :class="{
-              'w-[17.54%] h-[460px]': index !== currentSlide,
-              'w-[57.89%] h-[460px]': index === currentSlide
+              // Mobile: smaller widths, Desktop: original widths
+              'w-[15%] max-lg:h-[200px] lg:w-[17.54%] lg:h-[460px]': index !== currentSlide,
+              'w-[60%] max-lg:h-[200px] lg:w-[57.89%] lg:h-[460px]': index === currentSlide
             }"
             @click="goToSlide(index)"
           >
-            <!-- Image -->
             <NuxtImg
               :src="slide.image"
               :alt="`Feature ${index + 1}`"
               class="w-full h-full object-cover object-center transition-transform duration-300"
             />
 
-            <!-- Dark overlay gradient (always shown on inactive) -->
             <div
               v-if="index !== currentSlide"
-              class="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70 transition-opacity duration-300"
+              class="absolute inset-0 bg-linear-to-b from-black/10 to-black/70 transition-opacity duration-300"
             />
 
-            <!-- Arrow icon (only on inactive) -->
             <div
               v-if="index !== currentSlide"
               class="absolute bottom-[30px] left-1/2 -translate-x-1/2 transition-opacity duration-300"
@@ -203,7 +200,6 @@ onUnmounted(() => {
               />
             </div>
 
-            <!-- Progress bar (only on active) -->
             <div
               v-if="index === currentSlide"
               class="absolute bottom-[30px] left-5 right-5 h-2 bg-white/20 rounded overflow-hidden"

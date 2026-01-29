@@ -38,10 +38,10 @@ const socialLinks = [
 </script>
 
 <template>
-  <div class="max-w-[1560px] px-5 mx-auto">
+  <div class="max-w-[1560px] px-4 lg:px-5 mx-auto">
     <footer class="bg-[#1F2334] rounded-[30px]">
       <!-- Footer Top -->
-      <div class="pt-[120px] pb-[70px] px-8">
+      <div class="pt-20 lg:pt-[120px] pb-16 lg:pb-[70px] md:px-8">
         <UContainer>
           <div class="grid lg:grid-cols-12 gap-8 justify-between">
             <!-- Left Column - Brand -->
@@ -174,7 +174,7 @@ const socialLinks = [
       </div>
 
       <!-- Footer Bottom -->
-      <div class="border-t border-white/[0.1] py-[30px] px-8">
+      <div class="border-t border-white/10 py-[30px] md:px-8 max-md:text-sm max-md:text-center">
         <UContainer>
           <div class="grid md:grid-cols-12 gap-4">
             <div class="md:col-span-5 order-2 md:order-1">
@@ -183,7 +183,7 @@ const socialLinks = [
               </p>
             </div>
             <div class="md:col-span-7 order-1 md:order-2">
-              <ul class="flex items-center justify-end gap-[30px] list-none flex-wrap">
+              <ul class="flex items-center justify-center md:justify-end gap-3 lg:gap-[30px] list-none flex-wrap">
                 <li>
                   <NuxtLink
                     to="#"

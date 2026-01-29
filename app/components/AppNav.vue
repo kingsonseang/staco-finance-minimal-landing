@@ -1,18 +1,52 @@
 <script setup lang="ts">
+import OliveButton from './ui/OliveButton.vue'
+
+const isMobileMenuOpen = ref(false)
+
 const tabs = ref([
   { label: 'Home', value: '/' },
   { label: 'About', value: '/about' },
-  { label: 'Services', value: '/our-services' },
-  { label: 'Blogs', value: '/blog' },
-  { label: 'Contact us', value: '/contact-us' }
+  { label: 'Services', value: '#' },
+  { label: 'Blogs', value: '#' },
+  { label: 'Contact us', value: '#' }
 ])
+
+// Language selector
+const selectedLanguage = ref('EN')
+const isLanguageOpen = ref(false)
+
+const languages = [
+  { code: 'EN', name: 'English (US)' },
+  { code: 'EN', name: 'English (UK)' },
+  { code: 'ES', name: 'Español' },
+  { code: 'FR', name: 'Français' },
+  { code: 'Tü', name: 'Türkçe' },
+  { code: '简体', name: '简体中文' },
+  { code: 'ITA', name: 'Italiano' },
+  { code: 'العر', name: 'العربية' }
+]
+
+const toggleMobileMenu = () => {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+  if (isMobileMenuOpen.value) {
+    document.body.classList.add('nav-expanded')
+  } else {
+    document.body.classList.remove('nav-expanded')
+  }
+}
+
+onUnmounted(() => {
+  document.body.classList.remove('nav-expanded')
+})
 </script>
 
 <template>
   <div class="absolute top-0 left-0 right-0 z-50 pt-6">
-    <div class="md:w-fit w-full mx-auto flex items-center justify-between px-6 md:justify-center gap-4">
-      <AppLogo class="size-12 md:size-16" />
+    <div class="container mx-auto flex items-center justify-between px-6 md:justify-center gap-4">
+      <!-- Logo -->
+      <AppLogo class="h-12 md:h- w-auto" />
 
+      <!-- Desktop Navigation with Bubble -->
       <div class="max-md:hidden nav-wrap">
         <div class="bubble active" />
         <div class="bubble hover" />
@@ -27,12 +61,122 @@ const tabs = ref([
         </nav>
       </div>
 
+      <!-- Desktop Right Actions -->
+      <div class="max-md:hidden flex items-center gap-4">
+        <!-- Language Dropdown -->
+        <div class="relative">
+          <button
+            class="flex items-center gap-2 text-white hover:text-white/70 transition-colors"
+            @click="isLanguageOpen = !isLanguageOpen"
+          >
+            <NuxtImg
+              src="/images/icons/global-gray.svg"
+              alt="language"
+              class="w-5 h-5"
+            />
+            <span>{{ selectedLanguage }}</span>
+          </button>
+
+          <!-- Language Dropdown Menu -->
+          <div
+            v-if="isLanguageOpen"
+            class="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-black/10 py-2 z-50"
+          >
+            <button
+              v-for="(lang, index) in languages"
+              :key="index"
+              class="w-full px-4 py-2 text-left hover:bg-gray-100 transition-colors flex items-center justify-between"
+              @click="selectedLanguage = lang.code; isLanguageOpen = false"
+            >
+              <span class="font-bold text-[#111111]">{{ lang.code }}</span>
+              <span class="text-[#444444] text-sm">{{ lang.name }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sign In -->
+        <NuxtLink
+          to="/sign-in"
+          class="text-white hover:text-white/70 transition-colors"
+        >
+          Sign in
+        </NuxtLink>
+
+        <!-- Start Free Button -->
+        <OliveButton
+          to="/sign-up"
+          class="!h-12 !w-[120px]"
+        >
+          Start Free
+        </OliveButton>
+      </div>
+
+      <!-- Mobile Menu Toggle -->
       <div class="md:hidden">
-        <Icon
-          name="heroicons-solid:menu"
-          class="h-6 w-6"
-        />
+        <button
+          class="flex items-center justify-center"
+          @click="toggleMobileMenu"
+        >
+          <Icon
+            v-if="!isMobileMenuOpen"
+            name="heroicons-solid:menu"
+            class="h-6 w-6 text-white"
+          />
+          <Icon
+            v-else
+            name="heroicons-solid:x"
+            class="h-6 w-6 text-white"
+          />
+        </button>
       </div>
     </div>
+
+    <!-- Mobile Menu -->
+    <nav
+      class="md:hidden fixed top-0 left-0 w-full bg-white shadow-[0px_5px_15px_rgba(0,0,0,0.1)] pt-[70px] pb-5 overflow-y-auto transition-transform duration-300 z-[999]"
+      :class="isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'"
+    >
+      <div class="max-w-[720px] mx-auto px-2">
+        <!-- Mobile Nav Menu -->
+        <ul class="list-none m-0 p-0">
+          <li
+            v-for="tab in tabs"
+            :key="tab.value"
+            class="border-b border-black/10"
+          >
+            <NuxtLink
+              :to="tab.value"
+              class="block py-4 text-[#111111] font-medium hover:text-[#0095ff] transition-colors"
+              @click="toggleMobileMenu"
+            >
+              {{ tab.label }}
+            </NuxtLink>
+          </li>
+        </ul>
+
+        <!-- Mobile Buttons -->
+        <div class="flex items-center gap-4 mt-5">
+          <NuxtLink
+            to="/sign-in"
+            class="flex-1 text-center bg-black/5 rounded-[50px] px-12 py-3 font-bold text-[#111111] hover:bg-[#0095ff] hover:text-white transition-colors"
+          >
+            Sign in
+          </NuxtLink>
+          <OliveButton
+            to="/sign-up"
+            class="flex-1"
+          >
+            Start Free
+          </OliveButton>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Overlay -->
+    <div
+      v-if="isMobileMenuOpen"
+      class="fixed inset-0 bg-black/50 z-[998]"
+      @click="toggleMobileMenu"
+    />
   </div>
 </template>
