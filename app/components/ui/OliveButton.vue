@@ -15,7 +15,8 @@ const component = computed(() => isLink.value ? 'NuxtLink' : 'button')
   <component
     :is="component"
     :to="to"
-    class="w-[220px] h-[60px] bg-[#44C486] rounded-full flex items-center justify-center capitalize text-white relative overflow-hidden transition-all duration-300 font-bold border-0 cursor-pointer no-underline hover:bg-[#B2EDA1] focus:bg-[#B2EDA1] group"
+    :type="isLink ? undefined : 'button'"
+    class="w-[220px] h-[60px] bg-[#44C486] rounded-full flex items-center justify-center capitalize text-white relative overflow-hidden transition-all duration-300 font-bold border-0 cursor-pointer no-underline hover:bg-[#B2EDA1] focus:bg-[#B2EDA1] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 group"
     @click="onClick"
   >
     <span class="inline-block transition-transform duration-800 ease-[cubic-bezier(0.15,0.85,0.31,1)] group-hover:-translate-y-[150%] max-md:text-sm">

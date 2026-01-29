@@ -80,6 +80,25 @@ Recreate the finance landing page with the following requirements:
 - **Lazy Loading**: Images optimized with `NuxtImg`
 - **CSS**: Minimal custom CSS, leveraging Tailwind utilities
 
+## ♿ Accessibility
+
+### WCAG 2.1 Compliance Features
+- **ARIA Labels**: Comprehensive aria-label, aria-expanded, aria-controls on interactive elements
+- **Keyboard Navigation**: Full keyboard support with Tab, Enter, Space, and Escape keys
+- **Focus States**: Visible focus indicators using `focus-visible` pseudo-class
+- **Semantic HTML**: Proper use of `<nav>`, `<button>`, and heading hierarchy
+- **Screen Reader Support**: Role attributes (menu, menuitem, button) for assistive technologies
+- **Mobile Menu**: aria-hidden states and proper focus management
+- **Language Selector**: ARIA menu pattern with keyboard navigation
+- **Interactive Elements**: All buttons have type="button" and proper labels
+
+### Keyboard Controls
+- **Tab/Shift+Tab**: Navigate through interactive elements
+- **Enter/Space**: Activate buttons and links
+- **Escape**: Close dropdowns and modals (where implemented)
+- **Arrow Keys**: Navigate through menu items (language selector)
+
+
 ## 🐛 Known Issues
 
 ### Testimonial Carousel Timing Bug

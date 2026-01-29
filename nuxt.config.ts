@@ -2,6 +2,8 @@
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxt/image', 'motion-v/nuxt'],
 
+  ssr: false,
+
   devtools: {
     // enabled: process.env.NODE_ENV !== 'production'
     enabled: false

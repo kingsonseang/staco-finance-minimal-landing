@@ -48,9 +48,18 @@ onUnmounted(() => {
 
       <!-- Desktop Navigation with Bubble -->
       <div class="max-md:hidden nav-wrap">
-        <div class="bubble active" />
-        <div class="bubble hover" />
-        <nav class="nav">
+        <div
+          class="bubble active"
+          aria-hidden="true"
+        />
+        <div
+          class="bubble hover"
+          aria-hidden="true"
+        />
+        <nav
+          class="nav"
+          aria-label="Main navigation"
+        >
           <NuxtLink
             v-for="tab in tabs"
             :key="tab.value"
@@ -66,7 +75,11 @@ onUnmounted(() => {
         <!-- Language Dropdown -->
         <div class="relative">
           <button
-            class="flex items-center gap-2 text-white hover:text-white/70 transition-colors"
+            type="button"
+            class="flex items-center gap-2 text-white hover:text-white/70 transition-colors focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+            :aria-expanded="isLanguageOpen"
+            aria-label="Select language"
+            aria-controls="language-menu"
             @click="isLanguageOpen = !isLanguageOpen"
           >
             <NuxtImg
@@ -80,12 +93,18 @@ onUnmounted(() => {
           <!-- Language Dropdown Menu -->
           <div
             v-if="isLanguageOpen"
+            id="language-menu"
+            role="menu"
+            aria-label="Language options"
             class="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-black/10 py-2 z-50"
           >
             <button
               v-for="(lang, index) in languages"
               :key="index"
-              class="w-full px-4 py-2 text-left hover:bg-gray-100 transition-colors flex items-center justify-between"
+              type="button"
+              role="menuitem"
+              class="w-full px-4 py-2 text-left hover:bg-gray-100 transition-colors flex items-center justify-between focus-visible:outline-2 focus-visible:outline-green-500 focus-visible:bg-gray-50"
+              :aria-label="`Select ${lang.name}`"
               @click="selectedLanguage = lang.code; isLanguageOpen = false"
             >
               <span class="font-bold text-[#111111]">{{ lang.code }}</span>
@@ -114,7 +133,11 @@ onUnmounted(() => {
       <!-- Mobile Menu Toggle -->
       <div class="md:hidden">
         <button
-          class="flex items-center justify-center"
+          type="button"
+          class="flex items-center justify-center focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2 p-2"
+          :aria-expanded="isMobileMenuOpen"
+          aria-label="Toggle mobile menu"
+          aria-controls="mobile-nav"
           @click="toggleMobileMenu"
         >
           <Icon
@@ -133,8 +156,11 @@ onUnmounted(() => {
 
     <!-- Mobile Menu -->
     <nav
+      id="mobile-nav"
+      aria-label="Mobile navigation"
       class="md:hidden fixed top-0 left-0 w-full bg-white shadow-[0px_5px_15px_rgba(0,0,0,0.1)] pt-[70px] pb-5 overflow-y-auto transition-transform duration-300 z-[999]"
       :class="isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'"
+      :aria-hidden="!isMobileMenuOpen"
     >
       <div class="max-w-[720px] mx-auto px-2">
         <!-- Mobile Nav Menu -->
@@ -176,7 +202,12 @@ onUnmounted(() => {
     <div
       v-if="isMobileMenuOpen"
       class="fixed inset-0 bg-black/50 z-998"
+      role="button"
+      tabindex="0"
+      aria-label="Close mobile menu"
       @click="toggleMobileMenu"
+      @keydown.enter="toggleMobileMenu"
+      @keydown.space.prevent="toggleMobileMenu"
     />
   </div>
 </template>
