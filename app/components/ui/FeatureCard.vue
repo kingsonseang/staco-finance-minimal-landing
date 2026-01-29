@@ -44,7 +44,7 @@ defineProps<Props>()
           <NuxtImg
             src="/images/icons/features-arrow-right.svg"
             alt="arrow"
-            class="brightness-0 transition-all duration-300 group-hover:brightness-100 group-hover:rotate-[-45deg]"
+            class="brightness-0 transition-all duration-300 group-hover:brightness-100 group-hover:-rotate-45"
           />
         </div>
       </div>
