@@ -57,7 +57,7 @@ import AnimatedWords from '~/components/AnimatedWords.vue'
             <AnimatedWords :words="['Easier', 'Accountable', 'Unbeatable']" />
           </h1>
 
-          <p class="text-base lg:text-lg max-w-xl leading-[30px] font-medium mb-8 lg:mb-12">
+          <p class="text-white text-base lg:text-lg max-w-xl leading-[30px] font-medium mb-8 lg:mb-12">
             Staco is the dedicated platform for human management that helps to grow your startup
             business quickly
           </p>

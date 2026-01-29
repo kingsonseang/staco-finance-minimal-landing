@@ -1,21 +1,21 @@
 <script setup>
-import FeatureCard from './FeatureCard.vue'
+import FeatureCard from '../ui/FeatureCard.vue'
 
 const features = [
   {
-    icon: 'i-heroicons-server-stack',
+    image: '/images/finance-index/subtitle.svg',
     title: 'Used advanced technologies',
     description: 'I must explain to you how all this mistaken. Idea of main denouncing pleasure and praising pain was born',
     link: '#'
   },
   {
-    icon: 'i-heroicons-pencil-square',
+    image: '/images/finance-index/mask.svg',
     title: 'Clean design & Typography',
     description: 'I must explain to you how all this mistaken. Idea of main denouncing pleasure and praising pain was born',
     link: '#'
   },
   {
-    icon: 'i-heroicons-chat-bubble-left-right',
+    image: '/images/finance-index/archive-book.svg',
     title: 'Best customer support',
     description: 'I must explain to you how all this mistaken. Idea of main denouncing pleasure and praising pain was born',
     link: '#'
@@ -24,13 +24,13 @@ const features = [
 </script>
 
 <template>
-  <section class="py-20 bg-gray-50">
+  <section class="py-20">
     <UContainer>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         <FeatureCard
           v-for="(feature, index) in features"
           :key="index"
-          :icon="feature.icon"
+          :image="feature.image"
           :title="feature.title"
           :description="feature.description"
           :link="feature.link"

@@ -10,7 +10,7 @@ useHead({
     { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
     {
       rel: 'stylesheet',
-      href: 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@700&display=swap'
+      href: 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@700&Montserrat+Alternates:ital,wght@0,300;&display=swap'
     }
   ],
   htmlAttrs: {
@@ -31,7 +31,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <UApp>
+  <UApp class="bg-white">
     <!-- <AppNav /> -->
 
     <UMain>
