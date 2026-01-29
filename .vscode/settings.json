@@ -1,0 +1,19 @@
+{
+  "tailwindcss.includeLanguages": {
+    "vue": "html"
+  },
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    ["Classes\\s*=\\s*computed\\(\\(\\)\\s*=>\\s*([\\s\\S]+?)\\)", "'([^']+)'"]
+  ]
+}
