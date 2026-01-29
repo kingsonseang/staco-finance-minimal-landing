@@ -3,7 +3,8 @@ export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxt/image', 'motion-v/nuxt'],
 
   devtools: {
-    enabled: process.env.NODE_ENV !== 'production'
+    // enabled: process.env.NODE_ENV !== 'production'
+    enabled: false
   },
 
   css: ['~/assets/css/main.css'],

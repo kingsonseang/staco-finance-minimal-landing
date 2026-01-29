@@ -175,7 +175,7 @@ onUnmounted(() => {
     <!-- Overlay -->
     <div
       v-if="isMobileMenuOpen"
-      class="fixed inset-0 bg-black/50 z-[998]"
+      class="fixed inset-0 bg-black/50 z-998"
       @click="toggleMobileMenu"
     />
   </div>

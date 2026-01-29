@@ -1,7 +1,7 @@
 <script setup>
 import OliveButton from '../ui/OliveButton.vue'
 import HeroVideo from './HeroVideo.vue'
-import AnimatedWords from '~/components/AnimatedWords.vue'
+import AnimatedWords from '~/components/ui/AnimatedWords.vue'
 </script>
 
 <template>
