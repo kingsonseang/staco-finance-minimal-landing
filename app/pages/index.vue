@@ -16,7 +16,9 @@ import AppFooter from '~/components/AppFooter.vue'
     <TeamSection />
 
     <BottomSection>
-      <TestimonialsSection />
+      <ClientOnly>
+        <TestimonialsSection />
+      </ClientOnly>
       <AppFooter />
     </BottomSection>
   </div>
